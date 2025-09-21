@@ -1,0 +1,24 @@
+{
+  "name": "finora_api",
+  "version": "1.0.0",
+  "description": "Finiance Tracker App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anuuragg/finora_api.git"
+  },
+  "author": "Anurag Yadav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anuuragg/finora_api/issues"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.1"
+  }
+}
