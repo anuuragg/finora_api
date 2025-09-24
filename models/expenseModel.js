@@ -1,17 +1,11 @@
 const mongoose = require('mongoose');
-const Category = require('./categoryModels');
 
 const ExpenseSchema = mongoose.Schema(
     {
         user_id: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
             required: true
-        },
-
-        expense_id: {
-            type: String,
-            required: true,
-            unique: true
         },
 
         category: {
@@ -20,10 +14,10 @@ const ExpenseSchema = mongoose.Schema(
 			enum: ['needs', 'wants', 'savings', 'investments']
 		},
 
-		sub_categories: {
-			type: [String],
-			default: []
-		},
+		sub_category_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "SubCategory"
+        },
 
         amount: {
             type: Number,
@@ -35,8 +29,9 @@ const ExpenseSchema = mongoose.Schema(
             required: true
         },
 
-        timestamp: {
+        date: {
             type: Date,
+            default: Date.now,
             required: true
         },
 
@@ -50,36 +45,9 @@ const ExpenseSchema = mongoose.Schema(
             required: true 
         },
 
-        day: { 
-            type: Number,
-            required: true 
-        },
-
-        week: {
-            year: { 
-            type: Number, 
-            required: true 
-            },
-            weekNumber: { 
-            type: Number, 
-            required: true 
-            }
-        },
-
-    }
+    },
+    {timestamps: true}
 );
-
-ExpenseSchema.index({ year: 1 });
-ExpenseSchema.index({ month: 1 });
-ExpenseSchema.index({ day: 1 });
-ExpenseSchema.index({ 'week.year': 1, 'week.weekNumber': 1 });
-
-ExpenseSchema.index({ year: 1, category: 1 });
-ExpenseSchema.index({ month: 1, category: 1 });
-ExpenseSchema.index({ day: 1, category: 1 });
-ExpenseSchema.index({ 'week.year': 1, 'week.weekNumber': 1, category: 1 });
-
-ExpenseSchema.index({ user_id: 1, timestamp: -1 }); 
 
 const Expenses = mongoose.model('Expenses', ExpenseSchema);
 module.exports = Expenses;
