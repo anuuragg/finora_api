@@ -17,8 +17,10 @@
     "url": "https://github.com/anuuragg/finora_api/issues"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
     "uuid": "^8.3.2"
   }
