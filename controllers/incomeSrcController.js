@@ -54,10 +54,8 @@ const updateIncomeSrc = async (req, res) => {
 const deleteIncomeSrc = async (req, res) => {
     try{
         await dbConnect();
-        const incomeSrc = req.body.income_src;
-        if(!incomeSrc) return res.status(404).json({error: "No income source was entered"});
-        const deleted_src = await IncomeSrc.findOneAndDelete({income_src: incomeSrc});
-        if(!deleted_src) return res.status(500).json({error: "Couldn't delete the income source!"});
+        const deleted_src = await IncomeSrc.findOneAndDelete({income_src: req.params.income_src});
+        if(!deleted_src) return res.status(500).json({error: "Income source not found!"});
         res.status(201).json({deleted_src});
     } catch(err){
         res.status(500).json({error: err.message})

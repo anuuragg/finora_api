@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get('/get-user', verifyToken, getProfile);
 router.put('/update-user', verifyToken, updateProfile);
-router.delete('/delete-user', verifyToken, deleteProfile);
+router.delete('/delete-user/:id', verifyToken, deleteProfile);
 
 module.exports = router;
