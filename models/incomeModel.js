@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const IncomeSrc = require('incomeSrcModel');
+const IncomeSrc = require('./incomeSrcModel');
 
 const incomeSchema = mongoose.Schema(
     {
