@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/get-income-src', verifyToken, getIncomeSrc);
 router.post('/add-income-src', verifyToken, addIncomeSrc);
-router.put('/update-income-src', verifyToken, updateIncomeSrc);
+router.put('/update-income-src/:id', verifyToken, updateIncomeSrc);
 router.delete('/delete-income-src/:income_src', verifyToken, deleteIncomeSrc);
 
 router.get('/get-income', verifyToken, getIncome)

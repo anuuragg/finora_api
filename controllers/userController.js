@@ -17,7 +17,6 @@ const getProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
     try{
         await dbConnect();
-        const userId = req.user.id;
         const {name, email} = req.body;
         const updates = {};
         if (name) updates.name = name;
@@ -28,7 +27,7 @@ const updateProfile = async (req, res) => {
         }
 
         const updatedUser = await User.findByIdAndUpdate(
-            {_id: userId},
+            {_id: req.params.id},
             {$set: updates},
             {new: true, runValidators: true}
         ).select('-password');

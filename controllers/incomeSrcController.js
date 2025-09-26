@@ -33,13 +33,12 @@ const addIncomeSrc = async (req, res) => {
 const updateIncomeSrc = async (req, res) => {
     try{
         await dbConnect();
-        const userId = req.user.id;
         const {old_income_src, new_income_src} = req.body;
         if(!userId) return res.status(404).json({error: "User not found!"});
         if(!old_income_src) return res.status(404).json({error: "Old income source missing"});
         if(!new_income_src) return res.status(404).json({error: "No new income source was entered"});
         const updatedIncomeSrc = await IncomeSrc.findOneAndUpdate(
-            {user_id: userId, income_src: old_income_src},
+            {user_id: req.params.id, income_src: old_income_src},
             {income_src: new_income_src},
             {new: true, runValidators: true}
         );
