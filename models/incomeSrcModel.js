@@ -17,5 +17,5 @@ const incomeSrcSchema = mongoose.Schema(
     {timestamps: true}
 );
 
-const IncomeSrc = mongoose.model('incomeSrcSchema', IncomeSrc);
+const IncomeSrc = mongoose.model('IncomeSrc', incomeSrcSchema);
 module.exports = IncomeSrc;

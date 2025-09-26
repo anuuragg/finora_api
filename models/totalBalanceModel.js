@@ -47,5 +47,5 @@ const totalBalanceSchema = mongoose.Schema(
     {timestamps: true}
 );
 
-const TotalBalance = mongoose.model('totalBalanceSchema', TotalBalance);
+const TotalBalance = mongoose.model('TotalBalance', totalBalanceSchema);
 module.exports = TotalBalance;

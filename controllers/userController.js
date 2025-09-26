@@ -18,10 +18,7 @@ const updateProfile = async (req, res) => {
     try{
         await dbConnect();
         const userId = req.user.id;
-        console.log(userId)
-        console.log(req.user)
         const {name, email} = req.body;
-        console.log(name, email)
         const updates = {};
         if (name) updates.name = name;
         if (email) updates.email = email;
