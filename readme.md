@@ -24,7 +24,7 @@ JWT_SECRET=your_jwt_secret_key
 
 4. Start the server:
 ```bash
-npm start
+npm run dev
 ```
 
 ## Project Structure
@@ -54,36 +54,38 @@ npm start
 
 ## API Endpoints
 
-### Authentication Routes - `/api/auth`
+### Authentication Routes - `/auth`
 - `POST /signup` - Register user
 - `POST /login` - Login user
 
-### User Routes - `/api/user`
+### User Routes - `/user`
 - `GET /get-user` - Get user profile
 - `PUT /update-user/:id` - Update user
 - `DELETE /delete-user/:id` - Delete user
 
-### Income Routes - `/api/income`
+### Subcategory Routes - `/sub-cat`
+- `GET /get-all-sub-cat` - Get all subcategories
+- `GET /get-sub-cat/:id` - Get specific subcategory
+- `POST /create-sub-cat` - Create subcategory
+- `DELETE /delete-sub-cat/:id` - Delete subcategory
+
+### Income Routes - `/income`
 **Income Sources:**
-- `GET /get-income-src` - Get all income sources
+- `GET /get-all-income-src` - Get all income sources
+- `GET /get-income-src/:id` - Get specific income source
 - `POST /add-income-src` - Add income source
 - `PUT /update-income-src/:id` - Update income source
 - `DELETE /delete-income-src/:income_src` - Delete income source
 
 **Income Records:**
-- `GET /get-income` - Get all income
-- `POST /add-income` - Add income
+- `GET /get-all-income` - Get all income records
+- `GET /get-income/:id` - Get specific income record
+- `POST /add-income` - Add new income log
 - `PUT /update-income/:id` - Update income
 - `DELETE /delete-income/:id` - Delete income
 
-### Expense Routes - `/api/expense`
+### Expense Routes - `/expense`
 - `POST /create-expense` - Create expense
 - `GET /get-expense/:id` - Get specific expense
 - `GET /get-all-expenses` - Get all expenses
 - `DELETE /delete-expense/:id` - Delete expense
-
-### Subcategory Routes - `/api/sub-cat`
-- `GET /get-all-sub-cat` - Get all subcategories
-- `GET /get-sub-cat/:id` - Get specific subcategory
-- `POST /create-sub-cat` - Create subcategory
-- `DELETE /delete-sub-cat/:id` - Delete subcategory
