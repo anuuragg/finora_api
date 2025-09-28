@@ -10,18 +10,29 @@ class CustomError extends Error {
   }
 }
 
-const getIncomeSrc = async (req, res) => {
+const getIncomeSrcAll = async (req, res) => {
   try {
     const userId = req.user.id;
     await dbConnect();
     if (!userId) return res.status(404).json({ error: "User not found!" });
     const income_src = await IncomeSrc.find({ user_id: userId });
-    if (!income_src) throw new CustomError("No income source found!", 404);
+    if (!income_src) throw new CustomError("No income sources found!", 404);
     res.status(201).json({ income_src });
   } catch (err) {
     res.status(err.status).json({ error: err.message });
   }
 };
+
+const getIncomeSrc = async (req, res) => {
+    try{
+        await dbConnect();
+        const income_src = await IncomeSrc.findById(req.params.id);
+        if (!income_src) return res.status(404).json({error: "No income source found!"});
+        res.status(200).json(income_src);
+    } catch(err){
+        res.status(500).json({error: err.message})
+    }
+}
 
 const addIncomeSrc = async (req, res) => {
   try {
@@ -87,6 +98,7 @@ const deleteIncomeSrc = async (req, res) => {
 
 module.exports = {
   getIncomeSrc,
+  getIncomeSrcAll,
   addIncomeSrc,
   updateIncomeSrc,
   deleteIncomeSrc,

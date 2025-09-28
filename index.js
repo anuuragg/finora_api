@@ -15,11 +15,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
-app.use("/api/sub-cat/", subCatRoutes);
-app.use("/api/income", incomeRoutes);
-app.use("/api/expense", expenseRoutes);
+app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+app.use("/sub-cat", subCatRoutes);
+app.use("/income", incomeRoutes);
+app.use("/expense", expenseRoutes);
 
 app.get("/", (req, res) => {
   res.send("I'm in my room, lol");
