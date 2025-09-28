@@ -1,12 +1,12 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const dbConnect = require('./lib/dbConnect');
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
-const subCatRoutes = require('./routes/sub_cat')
-const incomeRoutes = require('./routes/income');
-const expenseRoutes = require('./routes/expenses')
-require('dotenv').config();
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const dbConnect = require("./lib/dbConnect");
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
+const subCatRoutes = require("./routes/sub_cat");
+const incomeRoutes = require("./routes/income");
+const expenseRoutes = require("./routes/expenses");
+require("dotenv").config();
 
 const app = express();
 dbConnect();
@@ -21,11 +21,11 @@ app.use("/api/sub-cat/", subCatRoutes);
 app.use("/api/income", incomeRoutes);
 app.use("/api/expense", expenseRoutes);
 
-app.get('/', (req, res) => {
-	res.send("I'm in my room, lol");
-})
+app.get("/", (req, res) => {
+  res.send("I'm in my room, lol");
+});
 
 const PORT = process.env.PORT || 8888;
 app.listen(PORT, () => {
-	console.log(`Server is running at http://localhost:${PORT}`)
+  console.log(`Server is running at http://localhost:${PORT}`);
 });
