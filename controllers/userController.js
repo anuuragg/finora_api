@@ -1,15 +1,16 @@
 const User = require('../models/userModel')
 const dbConnect = require('../lib/dbConnect')
+const CustomError = require('../lib/customError')
 
 const getProfile = async (req, res) => {
     try{
         await dbConnect();
         const userId = req.user.id;
         const user = await User.findById(userId).select('-password');
-        if(!user) return res.status(404).json({error: "User not found!"});
-        res.json(user);
+        if(user.length === 0) throw new CustomError("User not found!", 404);
+        res.status(200).json(User)
     } catch {
-        res.status(500).json({error: "User not found!"});
+        res.status(err.status || 500).json({ error: err.message });
     }
 };
 
@@ -23,7 +24,7 @@ const updateProfile = async (req, res) => {
         if (email) updates.email = email;
 
         if(Object.keys(updates).length === 0){
-            return res.status(404).json({error: "No fields provided for update!"});
+            return res.status(400).json({error: "No fields provided for update!"});
         }
 
         const updatedUser = await User.findByIdAndUpdate(
@@ -32,10 +33,12 @@ const updateProfile = async (req, res) => {
             {new: true, runValidators: true}
         ).select('-password');
 
+        if (updatedUser.length === 0) throw new CustomError("Failed to update", 500);
+
         res.status(201).json({updatedUser});
 
     } catch {
-        res.status(500).json({error: "User not found!"});
+        res.status(err.status || 500).json({ error: err.message });
     }
 }
 
@@ -44,10 +47,10 @@ const deleteProfile = async (req, res) => {
     try{
         await dbConnect();
         const deletedProfile = await User.findOneAndDelete({_id: req.params.id});
-        if(!deletedProfile) return res.status(404).json({ message: 'User not found :('});
+        if(deletedProfile.length === 0) throw new CustomError("User not found", 404);
         res.status(200).json({'message': 'User deleted successfully', deletedProfile});
     } catch {
-        res.status(500).json({error: "User not found!"});
+        res.status(err.status || 500).json({ error: err.message });
     }
 }
 

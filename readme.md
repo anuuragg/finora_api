@@ -6,7 +6,7 @@ A REST API for managing personal finances with income and expense tracking.
 
 1. Clone the repository:
 ```bash
-git clone finora_api
+git clone https://github.com/anuuragg/finora_api.git
 cd finora-api
 ```
 
