@@ -6,6 +6,7 @@ const userRoutes = require("./routes/user");
 const subCatRoutes = require("./routes/sub_cat");
 const incomeRoutes = require("./routes/income");
 const expenseRoutes = require("./routes/expenses");
+const totalBalRoutes = require('./routes/totalBalance');
 require("dotenv").config();
 
 const app = express();
@@ -20,6 +21,7 @@ app.use("/user", userRoutes);
 app.use("/sub-cat", subCatRoutes);
 app.use("/income", incomeRoutes);
 app.use("/expense", expenseRoutes);
+app.use('/total', totalBalRoutes);
 
 app.get("/", (req, res) => {
   res.send("I'm in my room, lol");
