@@ -8,7 +8,7 @@ router.get('/get-all-income-src', verifyToken, getIncomeSrcAll);
 router.get('/get-income-src/:id', verifyToken, getIncomeSrc);
 router.post('/add-income-src', verifyToken, addIncomeSrc);
 router.put('/update-income-src/:id', verifyToken, updateIncomeSrc);
-router.delete('/delete-income-src/:income_src', verifyToken, deleteIncomeSrc);
+router.delete('/delete-income-src/:id', verifyToken, deleteIncomeSrc);
 
 router.get('/get-all-income', verifyToken, getIncomeAll);
 router.get('/get-income/:id', verifyToken, getIncome);
