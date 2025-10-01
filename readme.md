@@ -6,8 +6,8 @@ A REST API for managing personal finances with income and expense tracking.
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd expense-management-api
+git clone finora_api
+cd finora-api
 ```
 
 2. Install dependencies:
@@ -75,7 +75,7 @@ npm run dev
 - `GET /get-income-src/:id` - Get specific income source
 - `POST /add-income-src` - Add income source
 - `PUT /update-income-src/:id` - Update income source
-- `DELETE /delete-income-src/:income_src` - Delete income source
+- `DELETE /delete-income-src/:id` - Delete income source
 
 **Income Records:**
 - `GET /get-all-income` - Get all income records
