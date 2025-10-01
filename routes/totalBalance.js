@@ -1,9 +1,9 @@
 const verifyToken = require('../middlewares/verifyToken');
-const {getAllTimeRecords, getMonthlyRecords} = require('../controllers/totalBalController');
+const {getRecords, getSpecificRecord} = require('../controllers/totalBalController');
 const express = require('express');
 const router = express.Router();
 
-router.get('/get-all-time-records', verifyToken, getAllTimeRecords);
-router.get('/get-monthly-records', verifyToken, getMonthlyRecords);
+router.get('/get-records', verifyToken, getRecords);
+router.get('/get-specific-record', verifyToken, getSpecificRecord);
 
 module.exports = router;

@@ -2,15 +2,19 @@ const Income = require('../models/incomeModel');
 const Expenses = require('../models/expenseModel');
 const CustomError = require('../lib/customError');
 const dbConnect = require('../lib/dbConnect');
+const buildDateFilter = require('../lib/dateFilter');
 
-const getAllTimeRecords = async (req, res) => {
+const getRecords = async (req, res) => {
     try{
         await dbConnect();
         const userId = req.user.id;
+        const {days} = req.body;
+        let dateFilter = buildDateFilter(days);
+
         const [incomeRecords, expenseRecords] = await Promise.all([
-            Income.find({user_id: userId}),
-            Expenses.find({user_id: userId})
-        ])
+        Income.find({ user_id: userId, ...dateFilter }),
+        Expenses.find({ user_id: userId, ...dateFilter })
+        ]);
 
         const total_income = incomeRecords.reduce((sum, record) => sum + record.amount, 0);
         const total_expenses = expenseRecords.reduce((sum, record) => sum + record.amount, 0);
@@ -36,32 +40,24 @@ const getAllTimeRecords = async (req, res) => {
     }
 }
 
-const getMonthlyRecords = async (req, res) => {
+const getSpecificRecord = async (req, res) => {
     try{
-        dbConnect();
+        await dbConnect();
         const userId = req.user.id;
-        const today = new Date();
-        today.setHours(23, 59, 59, 999);
-        const last30Days = new Date();
-        last30Days.setDate(today.getDate() - 30);
-        last30Days.setHours(0, 0, 0, 0);
+        const {date} = req.body;
+        const parsedDate = new Date(date);
+        const [incomeRecord, expenseRecord] = await Promise.all([
+        Income.find({ user_id: userId, date: parsedDate }),
+        Expenses.find({ user_id: userId, date: parsedDate })
+        ]);
 
-        const [incomeRecords, expenseRecords] = await Promise.all([
-            Income.find({user_id: userId, 
-                date: {$gte: last30Days, $lte: today}
-            }),
-            Expenses.find({user_id: userId, 
-                date: {$gte: last30Days, $lte: today}
-            })
-        ])
-
-        const total_income = incomeRecords.reduce((sum, record) => sum + record.amount, 0);
-        const total_expenses = expenseRecords.reduce((sum, record) => sum + record.amount, 0);
+        const total_income = incomeRecord.reduce((sum, record) => sum + record.amount, 0);
+        const total_expenses = expenseRecord.reduce((sum, record) => sum + record.amount, 0);
         
-        const total_savings = expenseRecords.reduce((sum, record) => record.category === 'savings' ? sum + record.amount : sum, 0);
-        const total_needs = expenseRecords.reduce((sum, record) => record.category === 'needs' ? sum + record.amount : sum, 0);
-        const total_wants = expenseRecords.reduce((sum, record) => record.category === 'wants' ? sum + record.amount : sum, 0);
-        const total_investments = expenseRecords.reduce((sum, record) => record.category === 'investments' ? sum + record.amount : sum, 0);
+        const total_savings = expenseRecord.reduce((sum, record) => record.category === 'savings' ? sum + record.amount : sum, 0);
+        const total_needs = expenseRecord.reduce((sum, record) => record.category === 'needs' ? sum + record.amount : sum, 0);
+        const total_wants = expenseRecord.reduce((sum, record) => record.category === 'wants' ? sum + record.amount : sum, 0);
+        const total_investments = expenseRecord.reduce((sum, record) => record.category === 'investments' ? sum + record.amount : sum, 0);
 
         const total = {
             total_income: total_income,
@@ -73,13 +69,12 @@ const getMonthlyRecords = async (req, res) => {
             total_balance: total_income - total_expenses
         }
 
+
         res.status(200).json(total);
     } catch(err){
         res.status(err.status || 500).json({error: err.message});
     }
 }
 
-// 7-day (parametric functions)
-// specific date shiiiiiii
 
-module.exports = {getAllTimeRecords, getMonthlyRecords};
+module.exports = {getRecords, getSpecificRecord};

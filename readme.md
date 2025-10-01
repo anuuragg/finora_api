@@ -91,3 +91,7 @@ npm run dev
 - `GET /get-all-expenses` - Get all expenses
 - `PUT /update-expense/:id` - udpdate specific expense
 - `DELETE /delete-expense/:id` - Delete expense
+
+### Total Balance Routes - `/total`
+- `GET /get-records` - Get total balance
+- `GET /get-specific-record` - Get total balance for a specified date
