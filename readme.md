@@ -89,4 +89,5 @@ npm run dev
 - `POST /create-expense` - Create expense
 - `GET /get-expense/:id` - Get specific expense
 - `GET /get-all-expenses` - Get all expenses
+- `PUT /update-expense/:id` - udpdate specific expense
 - `DELETE /delete-expense/:id` - Delete expense
