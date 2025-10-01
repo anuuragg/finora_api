@@ -48,7 +48,7 @@ const deleteSubCategory = async (req, res) => {
     try{
         await dbConnect();
         const deletedSubCat = await SubCategory.findByIdbAndDelete(req.params.id);
-        if (!deletedSubCat) return res.status(404).json({error: "Can't delete the sub-category"});
+        if (deletedSubCat.length === 0) throw new CustomError("Can't delete the sub-category", 500);
         res.status(200).json(deletedSubCat);
     } catch(err){
         res.status(err.status || 500).json({ error: err.message });

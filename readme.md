@@ -47,6 +47,7 @@ npm run dev
 │   └── verifyToken.js
 ├── lib/
 │   └── dbConnect.js
+│   └── customError.js
 ├── .env
 ├── server.js
 └── package.json

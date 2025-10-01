@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { syncIndexes } = require('mongoose');
+const CustomError = require('../lib/customError');
 
 const signup = async (req, res) => {
     const {name, email, password} = req.body;
@@ -18,7 +18,7 @@ const signup = async (req, res) => {
             })
             .json({user, token});
     } catch(err){
-        res.status(400).json({ error: err.message });
+        res.status(err.status || 500).json({ error: err.message });
     }
 }
 
@@ -26,9 +26,9 @@ const login = async (req, res) => {
     const {email, password} = req.body;
     try{
         const user = await User.findOne({email});
-        if (!user) throw new Error('User not found');
+        if (user.length === 0) throw new CustomError('User not found', 404);
         const valid = bcrypt.compare(password, user.password);
-        if (!valid) throw new Error('Invalid credentials');
+        if (!valid) throw new CustomError('Invalid credentials', 400);
         const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '30d'});
         res.status(201)
             .cookie("token", token, {
@@ -39,7 +39,7 @@ const login = async (req, res) => {
             })
             .json({user, token});
     } catch(err) {
-        res.status(400).json({ error: err.message });
+        res.status(err.status || 500).json({ error: err.message });
     }
 }
 
