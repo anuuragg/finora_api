@@ -1,90 +1,102 @@
-const Income = require('../models/incomeModel');
-const IncomeSrc = require('../models/incomeSrcModel');
-const dbConnect = require('../lib/dbConnect');
-const CustomError = require('../lib/customError');
+const Income = require("../models/incomeModel");
+const IncomeSrc = require("../models/incomeSrcModel");
+const dbConnect = require("../lib/dbConnect");
+const CustomError = require("../lib/customError");
 
 const getIncomeAll = async (req, res) => {
-    try{
-        await dbConnect();
-        const userId = req.user.id;
-        const incomeData = await Income.find({user_id: userId}).lean();
-        if (!incomeData) throw new CustomError("Can't fetch income", 404);
-        for (let i in incomeData){
-            const src_id = incomeData[i].source.toString();
-            const src = await IncomeSrc.findById(src_id).select('income_src -_id');
-            if (src.length === 0) throw new CustomError("Unable to get the income source", 404);
-            incomeData[i].source = src.income_src;
-        }
-        res.status(200).json(incomeData);
-    } catch(err) {
-        res.status(err.status || 500).json({ error: err.message });
-    }
-}
+  try {
+    await dbConnect();
+    const userId = req.user.id;
+    const incomeData = await Income.find({ user_id: userId })
+      .populate("source", "income_src -_id")
+      .lean();
+
+    if (!incomeData) throw new CustomError("Can't fetch income", 404);
+
+    res.status(200).json(incomeData);
+  } catch (err) {
+    res.status(err.status || 500).json({ error: err.message });
+  }
+};
 
 const getIncome = async (req, res) => {
-    try{
-        await dbConnect();
-        const income = await Income.findById(req.params.id).lean();
-        if (income.length === 0) throw new CustomError("Income not found!", 404);
-        for (let i in income){
-            const src_id = income[i].source.toString();
-            const src = await Income.findById(src_id).select('income_src -_id');
-            if (src.length === 0) throw new CustomError("Unable to get the income source", 404);
-            income[i].source = src.income_src;
-        }
-        res.status(200).json(income);
-    } catch(err){
-        res.status(err.status || 500).json({ error: err.message });
+  try {
+    await dbConnect();
+    const income = await Income.findById(req.params.id).lean();
+    if (income.length === 0) throw new CustomError("Income not found!", 404);
+    for (let i in income) {
+      const src_id = income[i].source.toString();
+      const src = await Income.findById(src_id).select("income_src -_id");
+      if (src.length === 0)
+        throw new CustomError("Unable to get the income source", 404);
+      income[i].source = src.income_src;
     }
-}
+    res.status(200).json(income);
+  } catch (err) {
+    res.status(err.status || 500).json({ error: err.message });
+  }
+};
 
 const addIncome = async (req, res) => {
-    try{
-        await dbConnect();
-        const userId = req.user.id;
-        const {amount, source, note, date} = req.body;
-        const requiredFields = { amount, source };
-        for (const [key, value] of Object.entries(requiredFields)) {
-            if (!value) throw new CustomError(`${key} is required`, 400);
-        }
-        const incomeData = {
-            user_id: userId,
-            amount: amount,
-            source: source,
-            note: note,
-            date: date
-        }
-
-        const income = await Income.create(incomeData);
-        if(income.length === 0) throw new CustomError("Couldn't add the expense to the DB", 500);
-        res.status(200).json(income);
-    } catch(err){
-        res.status(err.status || 500).json({ error: err.message });
+  try {
+    await dbConnect();
+    const userId = req.user.id;
+    const { amount, source, note, date } = req.body;
+    const requiredFields = { amount, source };
+    for (const [key, value] of Object.entries(requiredFields)) {
+      if (!value) throw new CustomError(`${key} is required`, 400);
     }
-}
+    const incomeData = {
+      user_id: userId,
+      amount: amount,
+      source: source,
+      note: note,
+      date: date,
+    };
+
+    const income = await Income.create(incomeData);
+    if (income.length === 0)
+      throw new CustomError("Couldn't add the expense to the DB", 500);
+    res.status(200).json(income);
+  } catch (err) {
+    res.status(err.status || 500).json({ error: err.message });
+  }
+};
 
 const updateIncome = async (req, res) => {
-    try{
-        await dbConnect();
-        const { amount, source, note, date } = req.body;
-        const updatedData = { amount, source, note, date };
-        const updatedIncome = await Income.findByIdAndUpdate(req.params.id, updatedData, { new: true });
-        if (updatedIncome.length === 0) throw new CustomError("Income not found!", 404);
-        res.status(200).json(updatedIncome);
-    } catch(err){
-        res.status(err.status || 500).json({ error: err.message });
-    }
-}
+  try {
+    await dbConnect();
+    const { amount, source, note, date } = req.body;
+    const updatedData = { amount, source, note, date };
+    const updatedIncome = await Income.findByIdAndUpdate(
+      req.params.id,
+      updatedData,
+      { new: true }
+    );
+    if (updatedIncome.length === 0)
+      throw new CustomError("Income not found!", 404);
+    res.status(200).json(updatedIncome);
+  } catch (err) {
+    res.status(err.status || 500).json({ error: err.message });
+  }
+};
 
 const deleteIncome = async (req, res) => {
-    try{
-        await dbConnect();
-        const deletedIncome = await Income.findByIdAndDelete(req.params.id);
-        if(deletedIncome.length === 0) throw new CustomError("Income not found!", 404);
-        res.status(200).json(deletedIncome);
-    } catch(err){
-        res.status(err.status || 500).json({ error: err.message });
-    }
-}
+  try {
+    await dbConnect();
+    const deletedIncome = await Income.findByIdAndDelete(req.params.id);
+    if (deletedIncome.length === 0)
+      throw new CustomError("Income not found!", 404);
+    res.status(200).json(deletedIncome);
+  } catch (err) {
+    res.status(err.status || 500).json({ error: err.message });
+  }
+};
 
-module.exports = {getIncomeAll, getIncome, addIncome, updateIncome, deleteIncome};
+module.exports = {
+  getIncomeAll,
+  getIncome,
+  addIncome,
+  updateIncome,
+  deleteIncome,
+};
