@@ -7,8 +7,7 @@ const getProfile = async (req, res) => {
         await dbConnect();
         const userId = req.user.id;
         const user = await User.findById(userId).select('-password');
-        if(user.length === 0) throw new CustomError("User not found!", 404);
-        res.status(200).json(User)
+        res.status(200).json(user)
     } catch {
         res.status(err.status || 500).json({ error: err.message });
     }
@@ -33,8 +32,6 @@ const updateProfile = async (req, res) => {
             {new: true, runValidators: true}
         ).select('-password');
 
-        if (updatedUser.length === 0) throw new CustomError("Failed to update", 500);
-
         res.status(201).json({updatedUser});
 
     } catch {
@@ -47,7 +44,6 @@ const deleteProfile = async (req, res) => {
     try{
         await dbConnect();
         const deletedProfile = await User.findOneAndDelete({_id: req.params.id});
-        if(deletedProfile.length === 0) throw new CustomError("User not found", 404);
         res.status(200).json({'message': 'User deleted successfully', deletedProfile});
     } catch {
         res.status(err.status || 500).json({ error: err.message });
