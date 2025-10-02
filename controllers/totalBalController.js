@@ -17,7 +17,6 @@ const getRecords = async (req, res) => {
             Expenses.find({ user_id: userId, ...dateFilter })
             .populate("sub_category_id", "sub_cat_name -_id")
         ]);
-        console.log(expenseRecords)
         const total = calculateTotals(incomeRecords, expenseRecords);
         res.status(200).json(total);
     } catch(err){
