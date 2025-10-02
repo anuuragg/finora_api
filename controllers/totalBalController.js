@@ -12,7 +12,7 @@ const getRecords = async (req, res) => {
         const {days} = req.body;
         let dateFilter = buildDateFilter(days);
 
-        const [incomeRecords, expenseRecords, subCatRecords] = await Promise.all([
+        const [incomeRecords, expenseRecords] = await Promise.all([
             Income.find({ user_id: userId, ...dateFilter }),
             Expenses.find({ user_id: userId, ...dateFilter })
             .populate("sub_category_id", "sub_cat_name -_id")
