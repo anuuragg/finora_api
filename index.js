@@ -15,8 +15,8 @@ dbConnect();
 
 app.use(cors({
   origin: "*",
-  methods: "*",
-  allowedHeaders: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
 app.use(express.json());
